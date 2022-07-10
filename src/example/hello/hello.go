@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/henrytien/go-swimming/example/stringutil"
+	"github.com/henrytien/go-swimming/src/example/stringutil"
 )
 
 func main() {
