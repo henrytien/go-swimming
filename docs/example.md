@@ -34,6 +34,26 @@ Library [stringutil](https://github.com/golang/example/blob/master/stringutil) c
 
 ## outyet
 
+```
+$ cd outyet
+$ go build
+```
+
+A web server that answers the question: "Is Go 1.x out yet?"
+
+Topics covered:
+
+- Command-line flags ([flag](https://golang.org/pkg/flag/))
+- Web servers ([net/http](https://golang.org/pkg/net/http/))
+- HTML Templates ([html/template](https://golang.org/pkg/html/template/))
+- Logging ([log](https://golang.org/pkg/log/))
+- Long-running background processes
+- Synchronizing data access between goroutines ([sync](https://golang.org/pkg/sync/))
+- Exporting server state for monitoring ([expvar](https://golang.org/pkg/expvar/))
+- Unit and integration tests ([testing](https://golang.org/pkg/testing/))
+- Dependency injection
+- Time ([time](https://golang.org/pkg/time/))
+
 ### packages
 
 **expvar**
@@ -86,6 +106,10 @@ Library [stringutil](https://github.com/golang/example/blob/master/stringutil) c
 >
 > The calendrical calculations always assume a Gregorian calendar, with no leap seconds.
 
+**testing**
+
+> Package testing provides support for automated testing of Go packages. It is intended to be used in concert with the "go test" command, which automates execution of any function of the form.
+
 ### golang syntax
 
 **Goroutines**
@@ -119,7 +143,36 @@ go s.poll()
 >
 > // documentation on the RWMutex type.
 
+**Channels**
 
+```go
+// Replace the pollSleep with a closure that we can block and unblock.
+	sleep := make(chan bool)
+	pollSleep = func(time.Duration) {
+		sleep <- true
+		sleep <- true
+	}
+```
+
+Channels are a typed conduit through which you can send and receive values with the channel operator, `<-`.
+
+```
+ch <- v    // Send v to channel ch.
+v := <-ch  // Receive from ch, and
+           // assign value to v.
+```
+
+(The data flows in the direction of the arrow.)
+
+Like maps and slices, channels must be created before use:
+
+```
+ch := make(chan int)
+```
+
+By default, sends and receives block until the other side is ready. This allows goroutines to synchronize without explicit locks or condition variables.
+
+The example code sums the numbers in a slice, distributing the work between two goroutines. Once both goroutines have completed their computation, it calculates the final result.
 
 ### build error
 
@@ -130,4 +183,23 @@ go s.poll()
 ```
 
 Because of the `ServerHTTP` interface does not implement.
+
+### FAQ
+
+- Why the C function can't return multiply value, but the Golang function could be do that?
+
+  You can read these articles and getting the answer.
+
+  - [The Function Stack](https://www.tenouk.com/Bufferoverflowc/Bufferoverflow2a.html)
+  - [Why do byte spills occur and what do they achieve?](https://stackoverflow.com/questions/16453314/why-do-byte-spills-occur-and-what-do-they-achieve)
+  - [Friday Q&A 2011-12-16: Disassembling the Assembly, Part 1](https://mikeash.com/pyblog/friday-qa-2011-12-16-disassembling-the-assembly-part-1.html)
+  - [x86 calling conventions](https://en.wikipedia.org/wiki/X86_calling_conventions)
+  - [Call Stack](https://en.wikipedia.org/wiki/Call_stack)
+  - [Chapter I: A Primer on Go Assembly](https://github.com/teh-cmc/go-internals/blob/master/chapter1_assembly_primer/README.md)
+
+- Use of defer in Go?
+
+  https://stackoverflow.com/questions/47607955/use-of-defer-in-go
+
+  
 
