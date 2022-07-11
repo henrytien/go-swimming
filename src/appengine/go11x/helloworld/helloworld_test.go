@@ -14,8 +14,8 @@ func TestIndexHander(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	hander := http.HandlerFunc(indexHandler)
-	hander.ServeHTTP(rr, req) // https://stackoverflow.com/questions/49668070/how-does-servehttp-work
+	handler := http.HandlerFunc(indexHandler)
+	handler.ServeHTTP(rr, req) // https://stackoverflow.com/questions/49668070/how-does-servehttp-work
 
 	if status := rr.Code; status != http.StatusOK {
 		t.Errorf(
@@ -34,4 +34,24 @@ func TestIndexHander(t *testing.T) {
 			"Hello, World!",
 		)
 	}
+}
+
+func TestIndexHanderNotFound(t *testing.T) {
+    req, err := http.NewRequest("Get", "/404", nil)
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    rr := httptest.NewRecorder()
+    handler := http.HandlerFunc(indexHandler)
+    log.Printf("req %v", req)
+    handler.ServeHTTP(rr, req)
+
+    if status := rr.Code; status != http.StatusNotFound {
+        t.Errorf(
+            "unexpected status: got (%v) want (%v)",
+            status,
+            http.StatusNotFound,
+        )
+    }
 }
