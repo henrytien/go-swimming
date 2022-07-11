@@ -196,7 +196,94 @@ Because of the `ServerHTTP` interface does not implement.
 
 A trivial "Hello, world" App Engine application intended to be used as the starting point for your own code. Please see [Google App Engine SDK for Go](https://cloud.google.com/appengine/downloads#Google_App_Engine_SDK_for_Go) and [Quickstart for Go in the App Engine Standard Environment](https://cloud.google.com/appengine/docs/standard/go/quickstart).
 
-### FAQ
+## App Engine
+
+[app.yaml](https://cloud.google.com/appengine/docs/standard/go/config/appref)
+
+### Building a Go App on App Engine
+
+To set up your `main.go` file:
+
+1. In your `go-app/` folder, create a `main.go` file.
+
+2. Add the `package main` statement to treat your code as an executable program:
+
+   ```
+   package main
+   ```
+
+   To successfully deploy a service in the Go 1.12+ runtimes, a `package main` statement must be defined at the beginning of at least one of your Go source files.
+
+   
+
+   **Learn more**: You do not have to put the `app.yaml` file and the `main.go` file in the same directory. You can specify the directory containing your main package by using `main:` in your project's `app.yaml` file. For more information, see the [`app.yaml` reference](https://cloud.google.com/appengine/docs/standard/go/config/appref).
+
+   
+
+3. Import the following packages:
+
+   [appengine/go11x/helloworld/helloworld.go](https://github.com/GoogleCloudPlatform/golang-samples/blob/HEAD/appengine/go11x/helloworld/helloworld.go)
+
+   [View on GitHub](https://github.com/GoogleCloudPlatform/golang-samples/blob/HEAD/appengine/go11x/helloworld/helloworld.go)
+
+   ```golang
+   import (
+           "fmt"
+           "log"
+           "net/http"
+           "os"
+   )
+   ```
+
+4. Define your HTTP handler:
+
+   [appengine/go11x/helloworld/helloworld.go](https://github.com/GoogleCloudPlatform/golang-samples/blob/HEAD/appengine/go11x/helloworld/helloworld.go)
+
+   [View on GitHub](https://github.com/GoogleCloudPlatform/golang-samples/blob/HEAD/appengine/go11x/helloworld/helloworld.go)
+
+   ```golang
+   // indexHandler responds to requests with our greeting.
+   func indexHandler(w http.ResponseWriter, r *http.Request) {
+           if r.URL.Path != "/" {
+                   http.NotFound(w, r)
+                   return
+           }
+           fmt.Fprint(w, "Hello, World!")
+   }
+   ```
+
+   The `http.ResponseWriter` object assembles the HTTP server response; by writing to it, you send data to the browser. The `http.Request` object is a data structure that represents the incoming HTTP request.
+
+5. Register your HTTP handler:
+
+   [appengine/go11x/helloworld/helloworld.go](https://github.com/GoogleCloudPlatform/golang-samples/blob/HEAD/appengine/go11x/helloworld/helloworld.go)
+
+   [View on GitHub](https://github.com/GoogleCloudPlatform/golang-samples/blob/HEAD/appengine/go11x/helloworld/helloworld.go)
+
+   ```golang
+   func main() {
+           http.HandleFunc("/", indexHandler)
+   
+           port := os.Getenv("PORT")
+           if port == "" {
+                   port = "8080"
+                   log.Printf("Defaulting to port %s", port)
+           }
+   
+           log.Printf("Listening on port %s", port)
+           if err := http.ListenAndServe(":"+port, nil); err != nil {
+                   log.Fatal(err)
+           }
+   }
+   ```
+
+   The `main` function is the entry point of your executable program, so it starts the application. It begins with a call to the `http.HandleFunc` function which tells the `http` package to handle all requests to the web root (`"/"`) with the `indexHandler` function.
+
+   If the `PORT` environment variable is not set, port `8080` is used as a default. When your app is running on App Engine, the `PORT` environment variable is set for you, but when testing your app locally, you can set `PORT` to any preferred value.
+
+   
+
+## FAQ
 
 - Why the C function can't return multiply value, but the Golang function could be do that?
 
