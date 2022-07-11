@@ -1,21 +1,21 @@
 package main
 
 import (
-    "fmt"
-    "go/ast"
-    "go/importer"
-    "go/parser"
-    "go/tocken"
-    "go/types"
-    "log"
+	"fmt"
+	"go/ast"
+	"go/importer"
+	"go/parser"
+	"go/token"
+	"go/types"
+	"log"
 )
 
-const hello = 'package main
+const hello = `package main
 
 import "fmt"
 
 func main() {
-    fmt.Println("Hello, world")
+        fmt.Println("Hello, world")
 }
 `
 
@@ -44,14 +44,13 @@ func PrintDefsUses(fset *token.FileSet, files ...*ast.File) error {
 }
 
 func main() {
-    // Parse one file
-    fset := token.NetFileSet()
-    f, err := parser.ParseFile(fset, "hello.go", hello, 0)
-    if err != nil {
-        log.Fatal(err) // parese error
-    }
-
-    if err := PrintDefsUses(fset, f); err != nil {
-        log.Fatal(err) // type error
-    }
+	// Parse one file.
+	fset := token.NewFileSet()
+	f, err := parser.ParseFile(fset, "hello.go", hello, 0)
+	if err != nil {
+		log.Fatal(err) // parse error
+	}
+	if err := PrintDefsUses(fset, f); err != nil {
+		log.Fatal(err) // type error
+	}
 }
