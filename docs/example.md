@@ -300,8 +300,15 @@ To set up your `main.go` file:
 
   https://stackoverflow.com/questions/47607955/use-of-defer-in-go
 
-- [How does ServeHTTP work?](https://stackoverflow.com/questions/49668070/how-does-servehttp-work)
-- 
+- How does ServeHTTP work?
+
+  https://stackoverflow.com/questions/49668070/how-does-servehttp-work
+
+## Reference
+
+- [Go Modules with Private GIT Repository](https://medium.com/swlh/go-modules-with-private-git-repository-3940b6835727)
+
+  
 
 
 
